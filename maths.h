@@ -11,7 +11,9 @@ class RandomNumGenerator {
         RandomNumGenerator(){};
         ~RandomNumGenerator(){};
         void print(){std::cout << "It's me!" << std::endl;};
-        void generate(std::vector<float> &sequence);
+//        void generate(std::vector<float> &sequence);
+        std::vector<float> generate(int n_elements);
+        std::vector<float> LinearCongruentialGenerators();
 };
 
 #endif
