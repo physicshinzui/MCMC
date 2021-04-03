@@ -1,6 +1,7 @@
 #include <time.h>
 #include <iostream>
 #include <vector>
+#include <cmath> 
 #include "maths.h"
 
 //void RandomNumGenerator::generate(std::vector<float> &sequence) {
@@ -16,22 +17,28 @@ std::vector<float> RandomNumGenerator::generate(int n_elements) {
     return sequence;
 }
 
-std::vector<int> RandomNumGenerator::linearCongruentialGenerator(){
+std::vector<int> RandomNumGenerator::linearCongruentialGenerator(unsigned int M = (int)std::pow(2,32), unsigned int a = 1664525, unsigned int b = 1013904223, unsigned int seed = 0, unsigned int N = 1){
     /*
-    x_{n+1} = a * x_n + b (mod M)
-    
-    The values of a, b, and M were taken from Numerical Recipes (https://en.wikipedia.org/wiki/Numerical_Recipes). 
+    Linear congruential generator:
+        x_{n+1} = a * x_n + b (mod M)
+    Args:
+        M: modulo
+        a: coef
+        b: 
+        N: the size of sequence to be returned.
+
+    Returns:
+        sequence (std::vector<int>) : a sequence of pseudo random number 
+
+    Note: the values of a, b, and M were taken from Numerical Recipes (https://en.wikipedia.org/wiki/Numerical_Recipes). 
     a = 1664525
     b = 1013904223
     M = 2^32
     */
-    const unsigned int a { 4 };
-    const unsigned int b { 1 };
-    const unsigned int M { 9 };
-    unsigned x_pre { 0 }; // x0 or (aka. seed)
 
+    unsigned int x_pre { seed };
     std::vector<int> sequence(0);
-    for (int i {0}; i < M ; ++i) {
+    for (int i {0}; i < N ; ++i) {
         int x_suc = (a * x_pre + b) % M;
         sequence.push_back(x_suc);
         x_pre = x_suc;
@@ -48,7 +55,7 @@ int main(){
         std::cout << num << std::endl;
     }
     std::cout << std::endl;
-    std::vector<int> seq_LGCs { gen.linearCongruentialGenerator() };
+    std::vector<int> seq_LGCs { gen.linearCongruentialGenerator(9, 2, 0, 1, 6) };
     for (auto num : seq_LGCs) {
         std::cout << num << std::endl;
     }

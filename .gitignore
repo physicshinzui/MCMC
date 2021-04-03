@@ -1,4 +1,4 @@
 a.out
 mcmc.exe
 test/
-maths.h.gch
+*.h.gch
