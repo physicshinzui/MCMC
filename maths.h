@@ -14,6 +14,7 @@ class RandomNumGenerator {
 //        void generate(std::vector<float> &sequence);
         std::vector<float> generate(int n_elements);
         std::vector<int> linearCongruentialGenerator(unsigned int M, unsigned int a, unsigned int b, unsigned int seed, unsigned int N);
+        
 };
 
 #endif
