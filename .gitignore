@@ -2,5 +2,5 @@ a.out
 mcmc.exe
 test/
 *.h.gch
-*.ipymb
+*.ipynb
 .ipynb*
