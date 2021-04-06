@@ -12,7 +12,7 @@ int box_muller() {
         double q { (double)rand()/RAND_MAX } ;
         double p { (double)rand()/RAND_MAX };
         double x = sqrt(-2*log(p)) * cos(2 * pi * q);
-        double y = sqrt(-2*log(p)) * cos(2 * pi * q);
+        double y = sqrt(-2*log(p)) * sin(2 * pi * q);
         std::cout << x << " " << y << std::endl;
 
     }
