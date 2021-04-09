@@ -31,7 +31,13 @@ Update and Metropolis test:
 
 
 */
-void metropolis();
+
+template<typename T>
+T S_action(T x, T mu, T var) {
+    double xx = (x - mu) * (x - mu);
+    return 0.5 * xx / var;
+}
+
 
 void metropolis(const int N, const double step_size, int seed) {
     std::srand(seed);
@@ -50,15 +56,14 @@ void metropolis(const int N, const double step_size, int seed) {
     for (int iter { 0 }; iter < N; ++iter) {
         double dx = (double)std::rand() / RAND_MAX - 0.5; // dx ranges [-0.5, 0.5] 
         dx = 2.0 * step_size * dx;  // dx ranges [-step_size * 1.0, step_size * 1.0] 
-        //std::cout << dx << std::endl;
         
         double x_suc = x_pre + dx;
         
         //Metropolis test
         double metropolis_r = (double)std::rand() / RAND_MAX; //[0, 1]
 
-        double action_pre {0.5 * x_pre * x_pre}; 
-        double action_suc {0.5 * x_suc * x_suc}; 
+        double action_pre {S_action(x_pre, 0.0, 9.0)};
+        double action_suc {S_action(x_suc, 0.0, 9.0)};
         
         if (std::exp(action_pre - action_suc) > metropolis_r) {
             ++n_accepts;
