@@ -33,7 +33,7 @@ Update and Metropolis test:
 */
 
 template<typename T>
-T S_action(T x, T mu, T var) {
+T S_action(T x, T mu = 0.0, T var = 1.0) { //default is mean = 0, variance = 1
     double xx = (x - mu) * (x - mu);
     return 0.5 * xx / var;
 }
@@ -43,7 +43,7 @@ void metropolis(const int N, const double step_size, int seed) {
     std::srand(seed);
     
     //Initialization 
-    double x_pre {0.0};
+    double x_pre {10.0}; //initial state x0
     int n_accepts {0}; 
 
     //to monitor convergence
@@ -62,8 +62,8 @@ void metropolis(const int N, const double step_size, int seed) {
         //Metropolis test
         double metropolis_r = (double)std::rand() / RAND_MAX; //[0, 1]
 
-        double action_pre {S_action(x_pre, 0.0, 9.0)};
-        double action_suc {S_action(x_suc, 0.0, 9.0)};
+        double action_pre {S_action(x_pre)};
+        double action_suc {S_action(x_suc)};
         
         if (std::exp(action_pre - action_suc) > metropolis_r) {
             ++n_accepts;
