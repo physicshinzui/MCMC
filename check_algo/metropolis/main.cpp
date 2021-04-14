@@ -2,6 +2,8 @@
 #include <cmath> 
 #include <ctime>
 #include <cstdlib>
+#include <functional>
+
 /*
 This program implements Metropolis algorithm.
 
@@ -47,6 +49,7 @@ T S_two_gauss(T x, T mu1 = -5.0, T mu2 = 5.0, T var1 = 1.0, T var2 = 1.0)
     return - log(exp1 + exp2);
 }
 
+
 void metropolis(const int N, const double step_size, int seed) 
 {
     std::srand(seed);
@@ -68,14 +71,14 @@ void metropolis(const int N, const double step_size, int seed)
         
         double x_suc = x_pre + dx; // an candidate state is made.
         
-        //Metropolis test
         double metropolis_r = (double)std::rand() / RAND_MAX; //[0, 1]
 
         // double action_pre {S_gauss(x_pre)};
         // double action_suc {S_gauss(x_suc)};
-        double action_pre {S_two_gauss(x_pre)};
-        double action_suc {S_two_gauss(x_suc)};
-        
+        double action_pre {S_two_gauss<double>(x_pre, -1, 1)};
+        double action_suc {S_two_gauss<double>(x_suc, -1, 1)};
+
+        //Metropolis test
         if (std::exp(action_pre - action_suc) > metropolis_r) {
             ++n_accepts;
             x_pre = x_suc;
@@ -93,6 +96,9 @@ void metropolis(const int N, const double step_size, int seed)
 }
 
 int main() 
-{
-    metropolis(1000000, 0.5, 10);
+{ 
+    int n_steps {1000000};
+    double time_step {0.5};
+    int rand_seed {10};
+    metropolis(n_steps, time_step, rand_seed);
 }
