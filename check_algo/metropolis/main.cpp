@@ -32,14 +32,23 @@ Update and Metropolis test:
 
 */
 
+// Gaussian: S = 0.5 * (x - mu)^2 / var 
 template<typename T>
-T S_action(T x, T mu = 0.0, T var = 1.0) { //default is mean = 0, variance = 1
+T S_gauss(T x, T mu = 0.0, T var = 1.0) 
+{ //default is mean = 0, variance = 1
     double xx = (x - mu) * (x - mu);
     return 0.5 * xx / var;
 }
+template<typename T> 
+T S_two_gauss(T x, T mu1 = -5.0, T mu2 = 5.0, T var1 = 1.0, T var2 = 1.0)
+{ 
+    double exp1 = exp(-0.5 * (x + mu1) * (x + mu1) / var1 );
+    double exp2 = exp(-0.5 * (x + mu2) * (x + mu2) / var2 );
+    return - log(exp1 + exp2);
+}
 
-
-void metropolis(const int N, const double step_size, int seed) {
+void metropolis(const int N, const double step_size, int seed) 
+{
     std::srand(seed);
     
     //Initialization 
@@ -54,16 +63,18 @@ void metropolis(const int N, const double step_size, int seed) {
 
     //Metropolis loop
     for (int iter { 0 }; iter < N; ++iter) {
-        double dx = (double)std::rand() / RAND_MAX - 0.5; // dx ranges [-0.5, 0.5] 
-        dx = 2.0 * step_size * dx;  // dx ranges [-step_size * 1.0, step_size * 1.0] 
+        double dx = (double)std::rand() / RAND_MAX - 0.5; // dx range is [-0.5, 0.5] 
+        dx = 2.0 * step_size * dx;                        // dx range is resized to [-step_size, step_size]. E.g., step_size=1 => [-1.0, 1.0]
         
-        double x_suc = x_pre + dx;
+        double x_suc = x_pre + dx; // an candidate state is made.
         
         //Metropolis test
         double metropolis_r = (double)std::rand() / RAND_MAX; //[0, 1]
 
-        double action_pre {S_action(x_pre)};
-        double action_suc {S_action(x_suc)};
+        // double action_pre {S_gauss(x_pre)};
+        // double action_suc {S_gauss(x_suc)};
+        double action_pre {S_two_gauss(x_pre)};
+        double action_suc {S_two_gauss(x_suc)};
         
         if (std::exp(action_pre - action_suc) > metropolis_r) {
             ++n_accepts;
@@ -81,8 +92,7 @@ void metropolis(const int N, const double step_size, int seed) {
     }
 }
 
-int main() {
+int main() 
+{
     metropolis(1000000, 0.5, 10);
-    //metropolis(5, 9);
-
 }
